@@ -1,0 +1,4 @@
+flutter run
+
+Android: go to AVD manager and hit play on the simulated device, then flutter run
+iOS: open -a Simulator -> flutter run
