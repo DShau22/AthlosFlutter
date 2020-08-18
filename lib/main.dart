@@ -1,15 +1,52 @@
 import 'package:flutter/material.dart';
-
+import './src/widgets/home/navigationApp.dart';
+import './src/widgets/login/loginEntry.dart';
 void main() {
-  runApp(MyApp());
+  runApp(AthlosApp());
 }
 
-class MyApp extends StatelessWidget {
+class AthlosApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _AthlosAppState createState() => _AthlosAppState();
+  // @override
+  // Widget build(BuildContext context) {
+  //   return MaterialApp(
+  //     title: 'Flutter Demo',
+  //     theme: ThemeData(
+  //       // This is the theme of your application.
+  //       //
+  //       // Try running your application with "flutter run". You'll see the
+  //       // application has a blue toolbar. Then, without quitting the app, try
+  //       // changing the primarySwatch below to Colors.green and then invoke
+  //       // "hot reload" (press "r" in the console where you ran "flutter run",
+  //       // or simply save your changes to "hot reload" in a Flutter IDE).
+  //       // Notice that the counter didn't reset back to zero; the application
+  //       // is not restarted.
+  //       primarySwatch: Colors.indigo,
+  //       // This makes the visual density adapt to the platform that you run
+  //       // the app on. For desktop platforms, the controls will be smaller and
+  //       // closer together (more dense) than on mobile platforms.
+  //       visualDensity: VisualDensity.adaptivePlatformDensity,
+  //     ),
+  //     // home: MyHomePage(title: 'Some title'),
+  //     home: App(),
+  //   );
+  // }
+}
+
+class _AthlosAppState extends State<AthlosApp> {
+  String _token = '';
+  void _setToken(String newToken) {
+    setState(() {
+      _token = newToken;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'flutter home',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,13 +57,17 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.indigo,
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      // if the token is empty, display login, else the main navigation app
+      home: 
+        _token.isEmpty ?
+        LoginEntry() : 
+        NavigationApp(),
     );
   }
 }
