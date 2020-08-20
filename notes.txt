@@ -2,3 +2,28 @@ flutter run
 
 Android: go to AVD manager and hit play on the simulated device, then flutter run
 iOS: open -a Simulator -> flutter run
+
+To add dependencies/packages, add it to the dependencies section in pubspec.yaml, then run flutter pub get
+
+anything with an underline in front of it means it's private
+
+Some nice widgets:
+  SafeArea: like in React Native
+  Wrap: Like a row/col but the components will wrap around. Direction : Axis.vertical/horizontal
+  RichText & TextSpan
+  clipRReact: gives rounded edges, wraps around child components <- apparently really hard on the hardware
+  MediaQuery: helps get the brightness, orientation, height, weight, etc of the device
+  FutureBuilder: helps for situations where you needa display something after an async operation finishes, else display loading
+  Flexible: wrapper to give a flex: number to a child like in RN flex style property
+  SizedBox: Wrapper to give a specific width and height to child
+  Align: Wrapper for child that allows you to do a self-align property like in CSS essentially
+
+Providers:
+Use future provider for the global app state, but prob not that diff from FutureBuilder?
+can use consumer2-consumer6 to consume multiple models
+models are in their own files, imported like how context is usually in own files
+ChangeNotifierProvider listens for changes in model class, places where calls to 
+  notifyListeners are called will notify listens/consumers of this provider
+  Model class uses ChangeNotifier mixin (with keyword)
+Always do Provider<ModelClass> (create: (context) => ModelClass(), child: ...)
+For consumers, there's only a builder field -> builder: (context, model, child) { return ... }
