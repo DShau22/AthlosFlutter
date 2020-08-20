@@ -29,7 +29,7 @@ class _SigninBodyAltState extends State<SigninBodyAlt> {
                   padding: EdgeInsets.all(30.0),
                   child: Column(
                     children: <Widget>[
-                      FadeAnimation(1.8, SigninForm()),
+                      FadeAnimation(1.8, SigninForm(setToken: loginModel.setToken)),
                       SizedBox(height: 40,),
                       FadeAnimation(2.2, 
                         Text(
