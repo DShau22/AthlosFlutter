@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:AthlosFlutter/src/models/userDataModel.dart';
+import 'package:AthlosFlutter/src/models/localFitnessModel.dart';
 
 class NavigationApp extends StatefulWidget {
   @override
@@ -21,32 +25,45 @@ class _NavigationAppState extends State<NavigationApp> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: Material(
-        child: TabBar(
-          tabs: <Tab> [
-            Tab(icon: Icon(Icons.person),),
-            Tab(icon: Icon(Icons.email),),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<UserDataModel>(create: (context) => UserDataModel()),
+        ChangeNotifierProvider<FitnessModel>(create: (context) => FitnessModel()),
+      ],
+      child: Scaffold(
+        bottomNavigationBar: Material(
+          child: TabBar(
+            tabs: <Tab> [
+              Tab(icon: Icon(Icons.fitness_center), text: 'fitness',),
+              Tab(icon: Icon(Icons.device_hub), text: 'config'),
+            ],
+            controller: _controller,
+          ),
+          color: Colors.blue,
+        ),
+        // this is where each screen goes
+        body: TabBarView(
+          children: <Widget>[
+            // fitness
+            Consumer2<UserDataModel, FitnessModel>(
+              builder: (context, userDataModel, fitnessModel, child) => Container(
+                color: Colors.orange,
+                alignment: Alignment.center,
+                child: Text('fitness tab!')
+              )
+            ),
+            // config
+            Consumer2<UserDataModel, FitnessModel>(
+              builder: (context, userDataModel, fitnessModel, child) => Container(
+                color: Colors.orange,
+                alignment: Alignment.center,
+                child: Text('config tab!')
+              )
+            )
           ],
           controller: _controller,
-        ),
-        color: Colors.blue,
+        )
       ),
-      body: TabBarView(
-        children: <Widget> [
-          Container(
-            color: Colors.orange,
-            alignment: Alignment.center,
-            child: Text('first tab!')
-          ),
-          Container(
-            color: Colors.yellow,
-            alignment: Alignment.center,
-            child: Text('second tab!')
-          )
-        ],
-        controller: _controller,
-      )
     );
   }
 }

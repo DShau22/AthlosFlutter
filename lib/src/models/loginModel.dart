@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:AthlosFlutter/src/models/signinModel.dart';
 import 'package:AthlosFlutter/src/models/signupModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
