@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:AthlosFlutter/src/models/userDataModel.dart';
 import 'package:AthlosFlutter/src/models/localFitnessModel.dart';
+import 'package:AthlosFlutter/src/widgets/fitness/fitness.dart';
 
 class NavigationApp extends StatefulWidget {
   @override
@@ -28,7 +29,7 @@ class _NavigationAppState extends State<NavigationApp> with SingleTickerProvider
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<UserDataModel>(create: (context) => UserDataModel()),
-        ChangeNotifierProvider<FitnessModel>(create: (context) => FitnessModel()),
+        // ChangeNotifierProvider<FitnessModel>(create: (context) => FitnessModel()),
       ],
       child: Scaffold(
         bottomNavigationBar: Material(
@@ -45,16 +46,12 @@ class _NavigationAppState extends State<NavigationApp> with SingleTickerProvider
         body: TabBarView(
           children: <Widget>[
             // fitness
-            Consumer2<UserDataModel, FitnessModel>(
-              builder: (context, userDataModel, fitnessModel, child) => Container(
-                color: Colors.orange,
-                alignment: Alignment.center,
-                child: Text('fitness tab!')
-              )
+            Consumer<UserDataModel>(
+              builder: (context, userDataModel, child) => Fitness(userDataModel)
             ),
             // config
-            Consumer2<UserDataModel, FitnessModel>(
-              builder: (context, userDataModel, fitnessModel, child) => Container(
+            Consumer<UserDataModel>(
+              builder: (context, userDataModel, child) => Container(
                 color: Colors.orange,
                 alignment: Alignment.center,
                 child: Text('config tab!')
