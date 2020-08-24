@@ -37,7 +37,7 @@ packages:
     source: hosted
     version: "1.0.1"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       url: "https://pub.dartlang.org"
@@ -102,6 +102,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.7"
+  horizontal_indicator:
+    dependency: "direct main"
+    description:
+      name: horizontal_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   http:
     dependency: "direct main"
     description:
@@ -116,6 +123,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.16.1"
   matcher:
     dependency: transitive
     description:
@@ -179,6 +193,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.3.2"
+  quiver:
+    dependency: "direct main"
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.3"
   rflutter_alert:
     dependency: "direct main"
     description:
