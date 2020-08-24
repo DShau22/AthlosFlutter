@@ -1,3 +1,4 @@
+import 'package:AthlosFlutter/src/widgets/fitness/fitnessConstants.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
 
@@ -63,7 +64,7 @@ class _RunState extends State<Run> {
 
   void setActivityIndex(newIndex) {
     setState(() {
-      this. activityIndex = newIndex;
+      this.activityIndex = newIndex;
     });
   }
 
@@ -73,13 +74,15 @@ class _RunState extends State<Run> {
     if (activityData.length == 0) {
       return Text("No Activity data");
     }
-    final runSession = activityData[this.activityIndex];
     final List donutData = this._makeDonutData();
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
           Carousel(
-            activityData: widget.runJson['activityData'],
+            activity: RUN,
+            primaryDisplay: '${activityData[this.activityIndex]['num']} steps',
+            secondaryDisplay: null,
+            activityData: activityData,
             activityIndex: this.activityIndex,
             setActivityIndex: this.setActivityIndex
           ),

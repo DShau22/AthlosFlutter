@@ -2,17 +2,24 @@ import 'dart:math';
 
 import 'package:AthlosFlutter/src/widgets/fitness/carousel/arrow.dart';
 import 'package:AthlosFlutter/src/widgets/fitness/carousel/carouselDisplay.dart';
+import 'package:AthlosFlutter/src/widgets/fitness/fitnessConstants.dart';
 import 'package:flutter/material.dart';
 
 import 'package:AthlosFlutter/src/utils/dates.dart';
 // this is the top component of each fitness page with the circle, 
 // image, main data display, arrows, and dropdown
 class Carousel extends StatefulWidget {
+  final String activity;
+  final String primaryDisplay;
+  final String secondaryDisplay;
   // the activity session (for swim, run, or jump)
   final List activityData;
   final Function setActivityIndex;
   final int activityIndex;
   Carousel({
+    @required this.activity,
+    @required this.primaryDisplay,
+    this.secondaryDisplay,
     @required this.activityData,
     @required this.activityIndex,
     @required this.setActivityIndex
@@ -22,23 +29,9 @@ class Carousel extends StatefulWidget {
 }
 
 class _CarouselState extends State<Carousel> {
-  List<String> dateTexts;
-  Map session;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    if (widget.activityData.length == 0) {
-      this.session = {};
-      this.dateTexts = [];
-    } else {
-      this.session = widget.activityData[widget.activityIndex];
-      this.dateTexts = widget.activityData.map<String>((session) => parseUploadDate(session['uploadDate'])).toList();
-    }
-  }
 
-  List<DropdownMenuItem<String>> _buildDropDownDates() {
-    return this.dateTexts.map((dateText) => DropdownMenuItem<String>(
+  List<DropdownMenuItem<String>> _buildDropDownDates(List<String> dateTexts) {
+    return dateTexts.map((dateText) => DropdownMenuItem<String>(
       value: dateText,
       child: Text(dateText)
     )).toList();
@@ -46,14 +39,22 @@ class _CarouselState extends State<Carousel> {
 
   @override
   Widget build(BuildContext context) {
-    print('activity index is: ${widget.activityIndex}');
+    Map session;
+    List<String> dateTexts;
+    if (widget.activityData.length == 0) {
+      session = {};
+      dateTexts = [];
+    } else {
+      session = widget.activityData[widget.activityIndex];
+      dateTexts = widget.activityData.map<String>((session) => parseUploadDate(session['uploadDate'])).toList();
+    }
     return Container(
       child: Column(
         children: <Widget>[
           Container(
             width: MediaQuery.of(context).size.width * .9,
             child: DropdownButton<String>(
-              value: this.dateTexts[widget.activityIndex],
+              value: dateTexts[widget.activityIndex],
               icon: Icon(Icons.arrow_drop_down),
               iconSize: 24,
               elevation: 16,
@@ -63,10 +64,10 @@ class _CarouselState extends State<Carousel> {
                 color: Colors.deepPurpleAccent,
               ),
               onChanged: (String dateText) {
-                widget.setActivityIndex(this.dateTexts.indexOf(dateText));
+                widget.setActivityIndex(dateTexts.indexOf(dateText));
               },
               // dropdown should be disabled if this is empty
-              items: this._buildDropDownDates()
+              items: this._buildDropDownDates(dateTexts)
             ),
           ),
           Container(
@@ -74,12 +75,16 @@ class _CarouselState extends State<Carousel> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Arrow(
-                  onPress: () => widget.setActivityIndex(max(widget.activityIndex - 1, 0)),
+                  onPress: () => widget.setActivityIndex(min(widget.activityData.length - 1, widget.activityIndex + 1)),
                   direction: 'left'
                 ),
-                CarouselDisplay(),
+                CarouselDisplay(
+                  activity: widget.activity,
+                  primaryDisplay: widget.primaryDisplay,
+                  secondaryDisplay: widget.secondaryDisplay,
+                ),
                 Arrow(
-                  onPress: () => widget.setActivityIndex(min(widget.activityData.length - 1, widget.activityIndex + 1)),
+                  onPress: () => widget.setActivityIndex(max(widget.activityIndex - 1, 0)),
                   direction: 'right'
                 ),
               ],

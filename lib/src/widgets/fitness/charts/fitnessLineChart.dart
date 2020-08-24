@@ -14,40 +14,6 @@ class FitnessLineChart extends StatefulWidget {
     @required double this.interval,
   });
 
-  double _getMaxValue() {
-    double maxi = -1;
-    for (int i = 0; i < this.values.length; i++) {
-      maxi = max(values[i].toDouble(), maxi);
-    }
-    return maxi;
-  }
-
-  double _getAverageValue() {
-    return this.values.fold(0, (p, c) => p + c) / this.values.length;
-  }
-
-  List<FlSpot> _createChartData() {
-    assert (this.labels.length == this.values.length, 
-              'labels and values are not the same length. Labels.length: ${labels.length}, Values.length: ${values.length}');
-    List<FlSpot> data = [];
-    for (int i = 0; i < labels.length; i++) {
-      data.add(FlSpot(labels[i].toDouble(), values[i].toDouble()));
-    }
-    return data;
-  }
-
-  List<FlSpot> _createAvgChartData() {
-    assert (this.labels.length == this.values.length, 
-              'labels and values are not the same length. Labels: $labels, Values: $values');
-    List<FlSpot> avgData = [];
-    double valueAverage = this._getAverageValue().floorToDouble();
-    print('avg: $valueAverage');
-    for (int i = 0; i < labels.length; i++) {
-      avgData.add(FlSpot(labels[i].toDouble(), valueAverage));
-    }
-    return avgData;
-  }
-
   @override
   _FitnessLineChartState createState() => _FitnessLineChartState();
 }
@@ -61,14 +27,59 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
 
   bool showAvg = false;
 
+  double _getMaxValue() {
+    double maxi = -1;
+    for (int i = 0; i < widget.values.length; i++) {
+      maxi = max(widget.values[i].toDouble(), maxi);
+    }
+    return maxi;
+  }
+
+  double _getAverageValue() {
+    return widget.values.fold(0, (p, c) => p + c) / widget.values.length;
+  }
+
+  double _getMinLabel() {
+    double mini = 100;
+    for (int i = 0; i < widget.labels.length; i++) {
+      mini = min(widget.labels[i].toDouble(), mini);
+    }
+    return mini;
+  }
+
+  List<FlSpot> _createChartData() {
+    assert (widget.labels.length == widget.values.length, 
+              'labels and values are not the same length. Labels.length: ${widget.labels.length}, Values.length: ${widget.values.length}');
+    List<FlSpot> data = [];
+    for (int i = 0; i < widget.labels.length; i++) {
+      data.add(FlSpot(widget.labels[i].toDouble(), widget.values[i].toDouble()));
+    }
+    return data;
+  }
+
+  List<FlSpot> _createAvgChartData() {
+    assert (widget.labels.length == widget.values.length, 
+              'labels and values are not the same length. Labels: $widget.labels, Values: $widget.values');
+    List<FlSpot> avgData = [];
+    double valueAverage = this._getAverageValue().floorToDouble();
+    print('avg: $valueAverage');
+    for (int i = 0; i < widget.labels.length; i++) {
+      avgData.add(FlSpot(widget.labels[i].toDouble(), valueAverage));
+    }
+    return avgData;
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.labels);
+    print(widget.values);
     return Stack(
       children: <Widget>[
         // CONTAINER FOR THE LINE CHART
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Container(
+            constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width * .9),
             height: 300,
             width: (widget.labels.length * 20).toDouble(),
             decoration: const BoxDecoration(
@@ -166,14 +177,14 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
       // options for the chart border styles
       borderData:
           FlBorderData(show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
-      minX: 0,
+      minX: this._getMinLabel(),
       // maxX: ,
       minY: 0,
-      maxY: widget._getMaxValue() + 10,
+      maxY: this._getMaxValue() + 10,
       // where the line data actually is in x, y pairs
       lineBarsData: [
         LineChartBarData(
-          spots: widget._createChartData(),
+          spots: this._createChartData(),
           isCurved: false,
           colors: gradientColors,
           barWidth: 5,
@@ -253,10 +264,10 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
       minX: 0,
       // maxX: 11,
       minY: 0,
-      maxY: widget._getMaxValue() + 10,
+      maxY: this._getMaxValue() + 10,
       lineBarsData: [
         LineChartBarData(
-          spots: widget._createAvgChartData(),
+          spots: this._createAvgChartData(),
           isCurved: true,
           colors: [
             ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2),
