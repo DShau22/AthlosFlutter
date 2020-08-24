@@ -64,7 +64,19 @@ class _FitnessState extends State<Fitness> {
                         }
                     },
                   ),
-                  Icon(Icons.directions_bike),
+                  FutureBuilder<Object>(
+                    future: widget.swimJsonFuture,
+                    builder: (BuildContext context, AsyncSnapshot<Object> snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting: return Text('Loading....');
+                        default:
+                          if (snapshot.hasError)
+                            return Text('Error: ${snapshot.error}');
+                          else
+                            return Swim(swimJson: snapshot.data);
+                        }
+                    },
+                  ),
                   FutureBuilder<Object>(
                     future: widget.jumpJsonFuture,
                     builder: (BuildContext context, AsyncSnapshot<Object> snapshot) {

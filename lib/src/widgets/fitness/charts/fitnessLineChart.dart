@@ -62,7 +62,6 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
               'labels and values are not the same length. Labels: $widget.labels, Values: $widget.values');
     List<FlSpot> avgData = [];
     double valueAverage = this._getAverageValue().floorToDouble();
-    print('avg: $valueAverage');
     for (int i = 0; i < widget.labels.length; i++) {
       avgData.add(FlSpot(widget.labels[i].toDouble(), valueAverage));
     }
@@ -71,8 +70,6 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.labels);
-    print(widget.values);
     return Stack(
       children: <Widget>[
         // CONTAINER FOR THE LINE CHART
@@ -201,7 +198,6 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
     );
   }
 
-
   LineChartData avgData() {
     return LineChartData(
       lineTouchData: LineTouchData(enabled: false),
@@ -261,7 +257,7 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
       ),
       borderData:
           FlBorderData(show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
-      minX: 0,
+      minX: this._getMinLabel(),
       // maxX: 11,
       minY: 0,
       maxY: this._getMaxValue() + 10,

@@ -21,7 +21,6 @@ class _JumpState extends State<Jump> {
   int activityIndex = 0;
   // create the labels for each jump
   List<int> _makeHeightLabels() {
-    print(widget.jumpJson);
     final jumpSession = widget.jumpJson['activityData'][this.activityIndex];
     return List.generate(jumpSession['heights'].length, (idx) => idx + 1);
   }

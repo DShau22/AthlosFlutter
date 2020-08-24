@@ -49,7 +49,7 @@ class FitnessModel with ChangeNotifier {
       // check if the activity is already in local storage
       String potentialActivityData = prefs.getString(activityToDataKey[activity]);
       if (potentialActivityData != null) {
-        print("already in local storage: $potentialActivityData");
+        // print("already in local storage: $potentialActivityData");
         return json.decode(potentialActivityData);
       }
       // else set the user Id and prepare to fetch from backend
