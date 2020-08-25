@@ -2,11 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 import 'package:AthlosFlutter/src/widgets/fitness/fitnessConstants.dart';
+import 'package:AthlosFlutter/src/constants.dart';
 
-Map activityToIcon = {
-  RUN: RUN_ICON,
+final Map activityToIcon = {
+  RUN:  RUN_ICON,
   SWIM: SWIM_ICON,
   JUMP: JUMP_ICON,
+};
+
+final Map<String, Color> activityToColor = {
+  RUN:  RUN_GRADIENT[0],
+  SWIM: SWIM_GRADIENT[0],
+  JUMP: JUMP_GRADIENT[0],
 };
 
 class CarouselDisplay extends StatefulWidget {
@@ -40,16 +47,20 @@ class _CarouselDisplayState extends State<CarouselDisplay> {
             children: <Widget>[
               Icon(
                 activityToIcon[widget.activity],
-                size: 50, 
+                size: 68, 
+                color: activityToColor[widget.activity], 
               ),
               SizedBox(height: 10),
-              Text(widget.primaryDisplay),
+              Text(
+                widget.primaryDisplay,
+                style: TextStyle(color: activityToColor[widget.activity], fontSize: 24)
+              ),
               SizedBox(height: 10),
               widget.secondaryDisplay != null ? Text(widget.secondaryDisplay) : SizedBox(height: 0)
             ],
           )
         ),
-        progressColor: Colors.green,
+        progressColor: activityToColor[widget.activity],
       )
     );
   }

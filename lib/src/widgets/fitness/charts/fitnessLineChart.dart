@@ -1,14 +1,18 @@
   
+import 'package:AthlosFlutter/src/constants.dart';
+import 'package:AthlosFlutter/src/widgets/fitness/carousel/carousel.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
 class FitnessLineChart extends StatefulWidget {
   // expects to take in numeric labels and values
+  final List<Color> gradientColors;
   final List labels;
   final List values;
   final double interval;
   FitnessLineChart({
+    @required List<Color> this.gradientColors,
     @required List this.labels,
     @required List this.values,
     @required double this.interval,
@@ -19,11 +23,6 @@ class FitnessLineChart extends StatefulWidget {
 }
 
 class _FitnessLineChartState extends State<FitnessLineChart> {
-
-  final List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
-  ];
 
   bool showAvg = false;
 
@@ -70,8 +69,26 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: <Widget>[
+        // BOX FOR THE AVERAGE TOGGLE
+        Align(
+          alignment: Alignment(-.8, 0),
+          child: FloatingActionButton.extended(
+            elevation: 5,
+            onPressed: () {
+              setState(() {
+                showAvg = !showAvg;
+              });
+            },
+            backgroundColor: widget.gradientColors[0],
+            label: Text(
+              showAvg ? 'Back' : 'See Average',
+              style: TextStyle(
+                  fontSize: 20, color: Colors.white),
+            ),
+          ),
+        ),
         // CONTAINER FOR THE LINE CHART
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -80,7 +97,7 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
             height: 300,
             width: (widget.labels.length * 20).toDouble(),
             decoration: const BoxDecoration(
-              color: Color(0xff232d37)
+              // color: Color(0xff232d37)
             ),
             child: Padding(
               padding: const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
@@ -88,23 +105,6 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
               child: LineChart(
                 showAvg ? avgData() : mainData(),
               ),
-            ),
-          ),
-        ),
-        // BOX FOR THE AVERAGE TOGGLE
-        SizedBox(
-          width: 60,
-          height: 34,
-          child: FlatButton(
-            onPressed: () {
-              setState(() {
-                showAvg = !showAvg;
-              });
-            },
-            child: Text(
-              'Avg',
-              style: TextStyle(
-                  fontSize: 12, color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white),
             ),
           ),
         ),
@@ -118,16 +118,21 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
       gridData: FlGridData(
         show: true,
         drawVerticalLine: true,
+        horizontalInterval: this._getMaxValue() / 5,
+        verticalInterval: min(5, (widget.labels.length/5).roundToDouble()),
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
+            color: TEXT_COLOR_LIGHT.withOpacity(.2),
             strokeWidth: 1,
+            dashArray: [8, 10],
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
+            // color: const Color(0xff37434d),
+            color: TEXT_COLOR_LIGHT.withOpacity(.2),
             strokeWidth: 1,
+            dashArray: [8, 10],
           );
         },
       ),
@@ -173,7 +178,7 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
       ),
       // options for the chart border styles
       borderData:
-          FlBorderData(show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
+        FlBorderData(show: false, border: Border.all(color: TEXT_COLOR_LIGHT.withOpacity(.1), width: 1)),
       minX: this._getMinLabel(),
       // maxX: ,
       minY: 0,
@@ -183,7 +188,7 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
         LineChartBarData(
           spots: this._createChartData(),
           isCurved: false,
-          colors: gradientColors,
+          colors: widget.gradientColors,
           barWidth: 5,
           isStrokeCapRound: true,
           dotData: FlDotData(
@@ -191,7 +196,7 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
           ),
           belowBarData: BarAreaData(
             show: true,
-            colors: gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+            colors: widget.gradientColors.map((color) => color.withOpacity(0.3)).toList(),
           ),
         ),
       ],
@@ -200,27 +205,33 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
 
   LineChartData avgData() {
     return LineChartData(
-      lineTouchData: LineTouchData(enabled: false),
+      // lineTouchData: LineTouchData(enabled: false),
       gridData: FlGridData(
         show: true,
         drawHorizontalLine: true,
-        getDrawingVerticalLine: (value) {
-          return FlLine(
-            color: const Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
+        horizontalInterval: this._getMaxValue() / 5,
+        verticalInterval: min(5, (widget.labels.length/5).roundToDouble()),
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: const Color(0xff37434d),
+            color: TEXT_COLOR_LIGHT.withOpacity(.2),
             strokeWidth: 1,
+            dashArray: [8, 10],
+          );
+        },
+        getDrawingVerticalLine: (value) {
+          return FlLine(
+            // color: const Color(0xff37434d),
+            color: TEXT_COLOR_LIGHT.withOpacity(.2),
+            strokeWidth: 1,
+            dashArray: [8, 10],
           );
         },
       ),
       titlesData: FlTitlesData(
         show: true,
         bottomTitles: SideTitles(
-          showTitles: false,
+          interval: (widget.values.length / 10).floorToDouble(),
+          showTitles: true,
           reservedSize: 22,
           textStyle:
               const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 16),
@@ -256,7 +267,7 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
         ),
       ),
       borderData:
-          FlBorderData(show: true, border: Border.all(color: const Color(0xff37434d), width: 1)),
+          FlBorderData(show: false, border: Border.all(color: const Color(0xff37434d), width: 1)),
       minX: this._getMinLabel(),
       // maxX: 11,
       minY: 0,
@@ -266,8 +277,8 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
           spots: this._createAvgChartData(),
           isCurved: true,
           colors: [
-            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2),
-            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2),
+            ColorTween(begin: widget.gradientColors[0], end: widget.gradientColors[1]).lerp(0.2),
+            ColorTween(begin: widget.gradientColors[0], end: widget.gradientColors[1]).lerp(0.2),
           ],
           barWidth: 5,
           isStrokeCapRound: true,
@@ -275,8 +286,8 @@ class _FitnessLineChartState extends State<FitnessLineChart> {
             show: false,
           ),
           belowBarData: BarAreaData(show: true, colors: [
-            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2).withOpacity(0.1),
-            ColorTween(begin: gradientColors[0], end: gradientColors[1]).lerp(0.2).withOpacity(0.1),
+            ColorTween(begin: widget.gradientColors[0], end: widget.gradientColors[1]).lerp(0.2).withOpacity(0.1),
+            ColorTween(begin: widget.gradientColors[0], end: widget.gradientColors[1]).lerp(0.2).withOpacity(0.1),
           ]),
         ),
       ],

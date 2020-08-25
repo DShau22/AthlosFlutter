@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:AthlosFlutter/src/constants.dart';
 import 'package:AthlosFlutter/src/widgets/fitness/fitnessConstants.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
@@ -69,7 +70,9 @@ class _JumpState extends State<Jump> {
             activityIndex: this.activityIndex,
             setActivityIndex: this.setActivityIndex
           ),
+          SizedBox(height: 20),
           FitnessLineChart(
+            gradientColors: JUMP_GRADIENT,
             labels: this._makeHeightLabels(),
             values: this._makeHeightValues(),
             interval: 5

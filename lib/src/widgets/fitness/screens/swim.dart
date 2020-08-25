@@ -1,3 +1,4 @@
+import 'package:AthlosFlutter/src/constants.dart';
 import 'package:AthlosFlutter/src/widgets/fitness/fitnessConstants.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
@@ -63,13 +64,11 @@ class _SwimState extends State<Swim> {
           break;
       }
     }
-    int totalLaps = session['strokes'].length;
     return [flyCount, backCount, breastCount, freeCount];
   }
 
   @override
   Widget build(BuildContext context) {
-    print('swim json: ${widget.swimJson}');
     final activityData = widget.swimJson['activityData'];
     if (activityData.length == 0) {
       return Text("No Activity data");
@@ -86,11 +85,14 @@ class _SwimState extends State<Swim> {
             activityIndex: this.activityIndex,
             setActivityIndex: this.setActivityIndex
           ),
+          SizedBox(height: 20),
           FitnessLineChart(
+            gradientColors: SWIM_GRADIENT,
             labels: this._makeTimesLabels(),
             values: this._makeTimesValues(),
             interval: 10
           ),
+          SizedBox(height: 20),
           FitnessPieChart(
             donutData, // pie chart values
             donutData.map((numLaps) => '${numLaps.toInt()} laps').toList(), // pie chart section labels

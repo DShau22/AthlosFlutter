@@ -1,3 +1,4 @@
+import 'package:AthlosFlutter/src/constants.dart';
 import 'package:AthlosFlutter/src/widgets/fitness/fitnessConstants.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
@@ -86,11 +87,14 @@ class _RunState extends State<Run> {
             activityIndex: this.activityIndex,
             setActivityIndex: this.setActivityIndex
           ),
+          SizedBox(height: 20),
           FitnessLineChart(
+            gradientColors: RUN_GRADIENT,
             labels: this._makePaceLabels(),
             values: this._makeCadenceValues(),
             interval: 50
           ),
+          SizedBox(height: 20),
           FitnessPieChart(
             donutData, // pie chart values
             donutData.map((percentage) => '$percentage%').toList(), // pie chart section labels

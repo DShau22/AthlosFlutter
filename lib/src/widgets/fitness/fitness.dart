@@ -39,6 +39,7 @@ class _FitnessState extends State<Fitness> {
           ],
           child: Scaffold(
             appBar: AppBar(
+              backgroundColor: Theme.of(context).accentColor,
               title: Text('Your Fitness'),
               bottom: TabBar(
                 tabs: [

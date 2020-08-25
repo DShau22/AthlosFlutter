@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:AthlosFlutter/src/constants.dart';
 import 'package:AthlosFlutter/src/widgets/fitness/carousel/arrow.dart';
 import 'package:AthlosFlutter/src/widgets/fitness/carousel/carouselDisplay.dart';
 import 'package:AthlosFlutter/src/widgets/fitness/fitnessConstants.dart';
@@ -8,6 +9,12 @@ import 'package:flutter/material.dart';
 import 'package:AthlosFlutter/src/utils/dates.dart';
 // this is the top component of each fitness page with the circle, 
 // image, main data display, arrows, and dropdown
+
+final Map<String, Color> activityToColor = {
+  RUN:  RUN_GRADIENT[0],
+  SWIM: SWIM_GRADIENT[0],
+  JUMP: JUMP_GRADIENT[0],
+};
 class Carousel extends StatefulWidget {
   final String activity;
   final String primaryDisplay;
@@ -51,18 +58,26 @@ class _CarouselState extends State<Carousel> {
     return Container(
       child: Column(
         children: <Widget>[
+          // dropdown button
           Container(
-            width: MediaQuery.of(context).size.width * .9,
+            padding: EdgeInsets.all(10),
+            width: MediaQuery.of(context).size.width,
+            color: Colors.blueGrey[50],
             child: DropdownButton<String>(
               value: dateTexts[widget.activityIndex],
-              icon: Icon(Icons.arrow_drop_down),
-              iconSize: 24,
-              elevation: 16,
-              style: TextStyle(color: Colors.deepPurple),
-              underline: Container(
-                height: 2,
-                color: Colors.deepPurpleAccent,
+              icon: Icon(
+                Icons.arrow_drop_down,
+                color: activityToColor[widget.activity]
               ),
+              iconSize: 36,
+              elevation: 16,
+              // dropdownColor: Colors.red,
+              style: TextStyle(
+                color: activityToColor[widget.activity],
+                fontSize: 20,
+              ),
+              isExpanded: true,
+              underline: SizedBox(height: 0),
               onChanged: (String dateText) {
                 widget.setActivityIndex(dateTexts.indexOf(dateText));
               },
@@ -70,11 +85,14 @@ class _CarouselState extends State<Carousel> {
               items: this._buildDropDownDates(dateTexts)
             ),
           ),
+          // carousel
           Container(
+            padding: EdgeInsets.all(6),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Arrow(
+                  color: activityToColor[widget.activity],
                   onPress: () => widget.setActivityIndex(min(widget.activityData.length - 1, widget.activityIndex + 1)),
                   direction: 'left'
                 ),
@@ -84,6 +102,7 @@ class _CarouselState extends State<Carousel> {
                   secondaryDisplay: widget.secondaryDisplay,
                 ),
                 Arrow(
+                  color: activityToColor[widget.activity],
                   onPress: () => widget.setActivityIndex(max(widget.activityIndex - 1, 0)),
                   direction: 'right'
                 ),

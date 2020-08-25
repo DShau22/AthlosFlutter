@@ -1,3 +1,4 @@
+import 'package:AthlosFlutter/src/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,7 +41,7 @@ class _NavigationAppState extends State<NavigationApp> with SingleTickerProvider
             ],
             controller: _controller,
           ),
-          color: Colors.blue,
+          color: TROPIC[3],
         ),
         // this is where each screen goes
         body: TabBarView(
